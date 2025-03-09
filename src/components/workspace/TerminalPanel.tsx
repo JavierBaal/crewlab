@@ -199,52 +199,54 @@ const TerminalPanel = ({
       </CardHeader>
 
       <CardContent className="p-0 flex-1 overflow-hidden">
-        <TabsContent value="terminal" className="h-full m-0 p-0">
-          <div
-            className="h-full flex flex-col bg-gray-950 text-green-400 font-mono text-sm p-3 overflow-hidden"
-            onClick={focusInput}
-          >
+        <Tabs value={activeTab} className="h-full">
+          <TabsContent value="terminal" className="h-full m-0 p-0">
             <div
-              ref={outputRef}
-              className="flex-1 overflow-y-auto whitespace-pre-wrap scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent"
+              className="h-full flex flex-col bg-gray-950 text-green-400 font-mono text-sm p-3 overflow-hidden"
+              onClick={focusInput}
             >
-              {terminalOutput}
-              {isRunning && (
-                <div className="inline-block animate-pulse">...</div>
-              )}
-              {!isRunning && (
-                <div className="flex items-center">
-                  <span className="text-green-500 mr-1">$</span>
-                  <span>{currentCommand}</span>
-                  <span className="inline-block w-2 h-4 bg-green-400 ml-0.5 animate-blink"></span>
-                </div>
-              )}
-            </div>
-
-            <form onSubmit={handleCommandSubmit} className="mt-2">
-              <div className="relative flex items-center">
-                <span className="text-green-500 mr-1">$</span>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={currentCommand}
-                  onChange={(e) => setCurrentCommand(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  className="flex-1 bg-transparent border-none outline-none text-green-400 font-mono text-sm"
-                  placeholder="Type a command..."
-                  disabled={isRunning}
-                  autoFocus
-                />
+              <div
+                ref={outputRef}
+                className="flex-1 overflow-y-auto whitespace-pre-wrap scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent"
+              >
+                {terminalOutput}
+                {isRunning && (
+                  <div className="inline-block animate-pulse">...</div>
+                )}
+                {!isRunning && (
+                  <div className="flex items-center">
+                    <span className="text-green-500 mr-1">$</span>
+                    <span>{currentCommand}</span>
+                    <span className="inline-block w-2 h-4 bg-green-400 ml-0.5 animate-blink"></span>
+                  </div>
+                )}
               </div>
-            </form>
-          </div>
-        </TabsContent>
 
-        <TabsContent value="output" className="h-full m-0 p-0">
-          <div className="h-full bg-gray-950 text-white font-mono text-sm p-3 overflow-y-auto whitespace-pre-wrap">
-            {terminalOutput}
-          </div>
-        </TabsContent>
+              <form onSubmit={handleCommandSubmit} className="mt-2">
+                <div className="relative flex items-center">
+                  <span className="text-green-500 mr-1">$</span>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={currentCommand}
+                    onChange={(e) => setCurrentCommand(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className="flex-1 bg-transparent border-none outline-none text-green-400 font-mono text-sm"
+                    placeholder="Type a command..."
+                    disabled={isRunning}
+                    autoFocus
+                  />
+                </div>
+              </form>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="output" className="h-full m-0 p-0">
+            <div className="h-full bg-gray-950 text-white font-mono text-sm p-3 overflow-y-auto whitespace-pre-wrap">
+              {terminalOutput}
+            </div>
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   );

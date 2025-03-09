@@ -335,148 +335,155 @@ const CollaborationPanel = ({
             </div>
 
             <CardContent className="flex-1 p-0 overflow-hidden">
-              <TabsContent
-                value="discussion"
-                className="h-full m-0 p-0 flex flex-col"
-              >
-                <ScrollArea className="flex-1 p-4">
-                  <div className="space-y-4">
-                    {activeSession.messages.map((message) => (
-                      <div
-                        key={message.id}
-                        className={`${getMessageTypeStyles(message.type)}`}
-                      >
-                        <div className="flex items-start">
-                          <Avatar className="h-8 w-8 mr-2 mt-0.5">
-                            <AvatarImage
-                              src={
-                                message.agentAvatar ||
-                                `https://api.dicebear.com/7.x/avataaars/svg?seed=${message.agentName}`
-                              }
-                              alt={message.agentName}
-                            />
-                            <AvatarFallback>
-                              {message.agentName.substring(0, 2).toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <div className="flex items-center">
-                              <span className="text-sm font-medium">
-                                {message.agentName}
-                              </span>
-                              <span className="text-xs text-muted-foreground ml-2">
-                                {message.timestamp.toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                })}
-                              </span>
-                              {message.type === "solution" && (
-                                <Badge
-                                  variant="secondary"
-                                  className="ml-2 text-xs"
-                                >
-                                  Solution
-                                </Badge>
-                              )}
-                            </div>
-                            <div className="text-sm mt-1 whitespace-pre-wrap">
-                              {message.content}
+              <Tabs value={activeTab} className="h-full">
+                <TabsContent
+                  value="discussion"
+                  className="h-full m-0 p-0 flex flex-col"
+                >
+                  <ScrollArea className="flex-1 p-4">
+                    <div className="space-y-4">
+                      {activeSession.messages.map((message) => (
+                        <div
+                          key={message.id}
+                          className={`${getMessageTypeStyles(message.type)}`}
+                        >
+                          <div className="flex items-start">
+                            <Avatar className="h-8 w-8 mr-2 mt-0.5">
+                              <AvatarImage
+                                src={
+                                  message.agentAvatar ||
+                                  `https://api.dicebear.com/7.x/avataaars/svg?seed=${message.agentName}`
+                                }
+                                alt={message.agentName}
+                              />
+                              <AvatarFallback>
+                                {message.agentName
+                                  .substring(0, 2)
+                                  .toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1">
+                              <div className="flex items-center">
+                                <span className="text-sm font-medium">
+                                  {message.agentName}
+                                </span>
+                                <span className="text-xs text-muted-foreground ml-2">
+                                  {message.timestamp.toLocaleTimeString([], {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                </span>
+                                {message.type === "solution" && (
+                                  <Badge
+                                    variant="secondary"
+                                    className="ml-2 text-xs"
+                                  >
+                                    Solution
+                                  </Badge>
+                                )}
+                              </div>
+                              <div className="text-sm mt-1 whitespace-pre-wrap">
+                                {message.content}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-
-                <div className="p-3 border-t">
-                  <div className="flex items-end gap-2">
-                    <div className="relative flex-grow">
-                      <textarea
-                        placeholder="Type your message..."
-                        className="min-h-[60px] w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        rows={2}
-                      />
-                    </div>
-                    <Button
-                      onClick={handleSendMessage}
-                      disabled={!newMessage.trim()}
-                      className="flex-shrink-0"
-                    >
-                      <MessageSquare className="h-4 w-4 mr-2" />
-                      Send
-                    </Button>
-                  </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="solutions" className="h-full m-0 p-0">
-                <ScrollArea className="h-full p-4">
-                  <div className="space-y-4">
-                    {activeSession.messages
-                      .filter((message) => message.type === "solution")
-                      .map((solution) => (
-                        <Card key={solution.id} className="border-green-200">
-                          <CardHeader className="py-3 px-4 bg-green-50 border-b border-green-200">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center">
-                                <Avatar className="h-6 w-6 mr-2">
-                                  <AvatarImage
-                                    src={
-                                      solution.agentAvatar ||
-                                      `https://api.dicebear.com/7.x/avataaars/svg?seed=${solution.agentName}`
-                                    }
-                                    alt={solution.agentName}
-                                  />
-                                  <AvatarFallback className="text-[10px]">
-                                    {solution.agentName
-                                      .substring(0, 2)
-                                      .toUpperCase()}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <div>
-                                  <span className="text-sm font-medium">
-                                    {solution.agentName}
-                                  </span>
-                                  <span className="text-xs text-muted-foreground ml-2">
-                                    {solution.timestamp.toLocaleTimeString([], {
-                                      hour: "2-digit",
-                                      minute: "2-digit",
-                                    })}
-                                  </span>
-                                </div>
-                              </div>
-                              <Badge variant="secondary" className="text-xs">
-                                Solution
-                              </Badge>
-                            </div>
-                          </CardHeader>
-                          <CardContent className="py-3 px-4">
-                            <div className="text-sm whitespace-pre-wrap">
-                              {solution.content}
-                            </div>
-                          </CardContent>
-                        </Card>
                       ))}
+                    </div>
+                  </ScrollArea>
 
-                    {activeSession.messages.filter(
-                      (message) => message.type === "solution",
-                    ).length === 0 && (
-                      <div className="flex flex-col items-center justify-center py-12 text-center">
-                        <AlertCircle className="h-12 w-12 text-muted-foreground mb-3 opacity-20" />
-                        <h3 className="text-lg font-medium">
-                          No solutions yet
-                        </h3>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Solutions proposed by agents will appear here
-                        </p>
+                  <div className="p-3 border-t">
+                    <div className="flex items-end gap-2">
+                      <div className="relative flex-grow">
+                        <textarea
+                          placeholder="Type your message..."
+                          className="min-h-[60px] w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                          value={newMessage}
+                          onChange={(e) => setNewMessage(e.target.value)}
+                          rows={2}
+                        />
                       </div>
-                    )}
+                      <Button
+                        onClick={handleSendMessage}
+                        disabled={!newMessage.trim()}
+                        className="flex-shrink-0"
+                      >
+                        <MessageSquare className="h-4 w-4 mr-2" />
+                        Send
+                      </Button>
+                    </div>
                   </div>
-                </ScrollArea>
-              </TabsContent>
+                </TabsContent>
+
+                <TabsContent value="solutions" className="h-full m-0 p-0">
+                  <ScrollArea className="h-full p-4">
+                    <div className="space-y-4">
+                      {activeSession.messages
+                        .filter((message) => message.type === "solution")
+                        .map((solution) => (
+                          <Card key={solution.id} className="border-green-200">
+                            <CardHeader className="py-3 px-4 bg-green-50 border-b border-green-200">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                  <Avatar className="h-6 w-6 mr-2">
+                                    <AvatarImage
+                                      src={
+                                        solution.agentAvatar ||
+                                        `https://api.dicebear.com/7.x/avataaars/svg?seed=${solution.agentName}`
+                                      }
+                                      alt={solution.agentName}
+                                    />
+                                    <AvatarFallback className="text-[10px]">
+                                      {solution.agentName
+                                        .substring(0, 2)
+                                        .toUpperCase()}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <div>
+                                    <span className="text-sm font-medium">
+                                      {solution.agentName}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground ml-2">
+                                      {solution.timestamp.toLocaleTimeString(
+                                        [],
+                                        {
+                                          hour: "2-digit",
+                                          minute: "2-digit",
+                                        },
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                                <Badge variant="secondary" className="text-xs">
+                                  Solution
+                                </Badge>
+                              </div>
+                            </CardHeader>
+                            <CardContent className="py-3 px-4">
+                              <div className="text-sm whitespace-pre-wrap">
+                                {solution.content}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+
+                      {activeSession.messages.filter(
+                        (message) => message.type === "solution",
+                      ).length === 0 && (
+                        <div className="flex flex-col items-center justify-center py-12 text-center">
+                          <AlertCircle className="h-12 w-12 text-muted-foreground mb-3 opacity-20" />
+                          <h3 className="text-lg font-medium">
+                            No solutions yet
+                          </h3>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Solutions proposed by agents will appear here
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </ScrollArea>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Tabs>
         </>
