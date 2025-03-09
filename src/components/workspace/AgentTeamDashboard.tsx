@@ -5,13 +5,14 @@ import {
   ResizableHandle,
 } from "@/components/ui/resizable";
 import { Separator } from "@/components/ui/separator";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Settings, Users } from "lucide-react";
 import AgentCardGrid from "./AgentCardGrid";
 import ChatInterface from "./ChatInterface";
 import TerminalPanel from "./TerminalPanel";
 import CodePanel from "./CodePanel";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Agent {
   id: string;
@@ -97,6 +98,7 @@ const AgentTeamDashboard = ({
   );
   const [isTerminalMaximized, setIsTerminalMaximized] = useState(false);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [activeTerminalTab, setActiveTerminalTab] = useState("terminal");
 
   const selectedAgent =
     agents.find((agent) => agent.id === selectedAgentId) || agents[0];
@@ -222,10 +224,15 @@ const AgentTeamDashboard = ({
         <div className="w-[612px] flex-shrink-0 border-l">
           <ResizablePanelGroup direction="vertical">
             <ResizablePanel defaultSize={50}>
-              <TerminalPanel
-                isMaximized={isTerminalMaximized}
-                onMaximizeToggle={toggleTerminalMaximize}
-              />
+              <Tabs
+                value={activeTerminalTab}
+                onValueChange={setActiveTerminalTab}
+              >
+                <TerminalPanel
+                  isMaximized={isTerminalMaximized}
+                  onMaximizeToggle={toggleTerminalMaximize}
+                />
+              </Tabs>
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={50}>
@@ -238,11 +245,6 @@ const AgentTeamDashboard = ({
       {/* Action buttons */}
       <div className="fixed bottom-6 right-6 flex space-x-2">
         <Dialog>
-          <DialogTrigger asChild>
-            <Button size="icon" className="rounded-full h-12 w-12 shadow-lg">
-              <Users className="h-5 w-5" />
-            </Button>
-          </DialogTrigger>
           <DialogContent className="sm:max-w-[600px]">
             <div className="p-4">
               <h2 className="text-lg font-semibold mb-4">
